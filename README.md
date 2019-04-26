@@ -24,11 +24,11 @@ in *sum.cl*:
 ```c
 // sum.cl
 __kernel void sum(__global float* result,
-				  __global float* a,
-				  __global float* b)
+                  __global float* a,
+                  __global float* b)
 {
-	int i = get_global_id(0);
-	result[i] = a[i] + b[i];
+    int i = get_global_id(0);
+    result[i] = a[i] + b[i];
 }
 ```
 ### 1.2 Convert Colored Image into Gray
@@ -54,12 +54,12 @@ in *bgr2gray.cl*:
 ```c
 // bgr2gray.cl
 __kernel void bgr2gray(__global uchar*  image_gray,
-					   __global uchar3* image_bgr)
+                       __global uchar3* image_bgr)
 {
-	int i = get_global_id(0);
-	image_gray[i] = (uchar)(0.11 * image_bgr[i].x + 
-							0.59 * image_bgr[i].y +
-							0.3  * image_bgr[i].z);
+    int i = get_global_id(0);
+    image_gray[i] = (uchar)(0.11 * image_bgr[i].x + 
+                            0.59 * image_bgr[i].y +
+                            0.3  * image_bgr[i].z);
 }
 ```
 Easy enough, isn't it?
