@@ -1,7 +1,7 @@
-#PyGPU: A very simple interface for calling GPU
+# PyGPU: A very simple interface for calling GPU
 
-##1. Preview
-###1.1 Sum two arrays
+## 1. Preview
+### 1.1 Sum two arrays
 If you want to sum two arrays with GPU, write code just like this:  
 in *main.py*:
 ```python
@@ -31,7 +31,7 @@ __kernel void sum(__global float* result,
 	result[i] = a[i] + b[i];
 }
 ```
-###1.2 Convert Colored Image into Gray
+### 1.2 Convert Colored Image into Gray
 If you want to convert a colored image into gray mode with GPU, write code just like this:  
 in *main.py*:
 ```python
@@ -64,14 +64,14 @@ __kernel void bgr2gray(__global uchar*  image_gray,
 ```
 Easy enough, isn't it?
 
-##2. Installing
-###2.1 Installing Numpy and OpenCV-Python
+## 2. Installing
+### 2.1 Installing Numpy and OpenCV-Python
 Just use the following command:
 ```shell
 pip install numpy
 pip install opencv-python
 ```
-###2.2 Installing PyOpenCL
+### 2.2 Installing PyOpenCL
 1. Update OpenCL driver:   
 
 	* For Intel graphics card, go to website [OpenCL™ Runtimes for Intel® Processors](https://software.intel.com/en-us/articles/opencl-drivers#win64), download the correct driver for your operating system then install it.
@@ -86,17 +86,17 @@ pip install opencv-python
 
 	2. Use command ``pip install <the file name you've just download>`` to install PyOpenCL
 
-###2.3 Installing PyGPU:
+### 2.3 Installing PyGPU:
 * If you just want to import pygpu temporarily, put the file *pygpu.py* in your work directory and then you can import it in your program.
 
 * If you want to import pygpu from anywhere, put the file *pygpu.py* in the directory *Path\to\Python3\Lib\site-packages* or *Path\to\Anaconda3\Lib\site-packages* if you has Anaconda installed.
 
-##3. Usage
+## 3. Usage
 First of all, you need to import pygpu in the head using:
 ```python
 from pygpu import *
 ```
-###3.1 process a single mission
+### 3.1 process a single mission
 1. **Define a GPU class' variable**(for example, name it as ``gpu``)  
 There are three ways to do this: 
 	1. ``gpu = GPU()``: This will use the default GPU device. In detail, it use the GPU on platform 0 and device 0.
@@ -215,7 +215,7 @@ instead, using
 result2 = gpu(None, 4)
 ```
 
-###3.2 process multi-missions with a single GPU
+### 3.2 process multi-missions with a single GPU
 If you want to do some same process for different arrays, such as for different images, but these images have the same size, you can copy these images to device together, process them together and copy them from device to host together. This will save a lot of time. You can do this in the following way:
 1. **Define a GPU class variable ``gpu``**  
 2. **Write kernel program**  
@@ -244,10 +244,10 @@ Just use ``gpu.run()`` is OK.
 8. **Get results**
 You can get ``i``th mission's result by using ``result = gpu.result(i)``
 
-###3.3 process multi-missions with multi-GPUs
+### 3.3 process multi-missions with multi-GPUs
 If you change the declaration in the first step ``gpu = GPU()`` into ``gpu = AllGPUs()``, it will automatically distribute missions to all GPUs on your computer and let them start computation at the same time.
 
-###3.4 other functions
+### 3.4 other functions
 1. ``GPU.device_name()`` return the current GPU name.
 2. ``GPU.print_info()`` or ``AllGPUs.print_info()`` print current GPU's detail information or all GPUs' detail information.
 3. ``GPU.clear()`` or ``AllGPUs.clear()`` make GPU or AllGPUs class' instance return to the state before set_program.
@@ -264,13 +264,13 @@ If you change the declaration in the first step ``gpu = GPU()`` into ``gpu = All
 8. ``GPU.host2device_time()`` return the time of copying data from host to device of last computation(in second).
 9. ``GPU.total_time()`` return the total time of last computation(in second).
 
-##4. Examples
+## 4. Examples
 In **Preview** section, there are already two examples. In ``examples`` folder, there are two more complex examples:
 	* Gaussain Blur a image(*blur.py*, it will teach you how to transform index between 2-dimensional matrix and one-dimensional array)
 	* Gaussain Blur a lot of images(*batch_process.py*, it will teach you how to use multi-processing method of PyGPU)
 You can run them directly.
 
-##5. Limitation
+## 5. Limitation
 This library's usage is simple enough. Simple means the degree of freedom is low. So their are much limitation. Here list some limitation I known:
 1. There can only be one output argument in kernel function.
 2. The output argument in kernel function must be the first argument in kernel function.
