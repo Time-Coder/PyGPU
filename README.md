@@ -189,19 +189,18 @@ half*          | half2*          | half3*          | half4*          | half8*   
 float*         | float2*         | float3*         | float4*         | float8*         | float16*
 double*        | double2*        | double3*        | double4*        | double8*        | double16*
 
-	* if you use **scalar type** in kernel function, for example the first input argument is ``double arg1``, in host program, you can set ``arg1`` a single value(means not numpy array or list or tuple or other things, just a single value). You don't need to transform the type of ``arg1``. That means if you want to set ``arg1 = 1``, then just pass ``1`` to ``gpu``. You don't need to transform 1 to specific type such as ``np.float64(1)`` or ``cl.cltypes.double(1)``, no need.
+* if you use **scalar type** in kernel function, for example the first input argument is ``double arg1``, in host program, you can set ``arg1`` a single value(means not numpy array or list or tuple or other things, just a single value). You don't need to transform the type of ``arg1``. That means if you want to set ``arg1 = 1``, then just pass ``1`` to ``gpu``. You don't need to transform 1 to specific type such as ``np.float64(1)`` or ``cl.cltypes.double(1)``, no need.
 
-	* if you use **vector type** in kernel function, for example the second input argument is ``float3 arg2``, in host program, then you can set ``arg2`` one of following type value:
-		* a one row numpy.ndarray with size 3, such as ``np.random.rand(3)``
-		* a list with 3 scalar value, such as ``[1, 2, 3]``
-		* a tuple with 3 scalar value, such as ``(1, 2, 3)``
-	But you can't let ``arg2`` maked by ``cl.cltypes.make_float3(...)``. Forget the old type transform way, forget them.
+* if you use **vector type** in kernel function, for example the second input argument is ``float3 arg2``, in host program, then you can set ``arg2`` one of following type value:
+	* a one row numpy.ndarray with size 3, such as ``np.random.rand(3)``
+	* a list with 3 scalar value, such as ``[1, 2, 3]``
+	* a tuple with 3 scalar value, such as ``(1, 2, 3)``. But you can't let ``arg2`` maked by ``cl.cltypes.make_float3(...)``. Forget the old type transform way, forget them.
 
-	* if you use **pointer** in kernel function, for example the third input argument is ``__global float*``, in the host program, you can set ``arg3`` one of the following type:
-		* a list of single value, such as ``[1, 2, 3, 4, 5, 6, ...]``
-		* a list of list or more nesting, such as ``[[1,2,3], [3,5,2], [9,3,6], ...]``
-		* a numpy.ndarray, such as ``np.random.rand(3)``, ``np.random.rand(3, 3)``, ``np.random.rand(3, 3, 3)``
-	All multi-dimension matrix liked data will be flatten into one dimension. And in the kernel side, you need to do some index tranform. You will see it in examples.
+* if you use **pointer** in kernel function, for example the third input argument is ``__global float*``, in the host program, you can set ``arg3`` one of the following type:
+	* a list of single value, such as ``[1, 2, 3, 4, 5, 6, ...]``
+	* a list of list or more nesting, such as ``[[1,2,3], [3,5,2], [9,3,6], ...]``
+	* a numpy.ndarray, such as ``np.random.rand(3)``, ``np.random.rand(3, 3)``, ``np.random.rand(3, 3, 3)``
+All multi-dimension matrix liked data will be flatten into one dimension. And in the kernel side, you need to do some index tranform. You will see it in examples.
 
 6. **Next time you call ``gpu``**
 If you have call ``gpu`` once in this way: ``result = gpu(arg1, arg2, arg3, ...)``, next time you call ``gpu`` if some arguments are the same as first time, use ``None`` can avoid copying large data from host to device. For example, if ``arg1`` is a very large matrix and you called ``gpu`` once just like:
@@ -268,9 +267,8 @@ If you change the declaration in the first step ``gpu = GPU()`` into ``gpu = All
 
 ## 4. Examples
 In **Preview** section, there are already two examples. In ``examples`` folder, there are two more complex examples:
-
-	* Gaussain Blur a image(*blur.py*, it will teach you how to transform index between 2-dimensional matrix and one-dimensional array)
-	* Gaussain Blur a lot of images(*batch_process.py*, it will teach you how to use multi-processing method of PyGPU)
+* Gaussain Blur a image(*blur.py*, it will teach you how to transform index between 2-dimensional matrix and one-dimensional array)
+* Gaussain Blur a lot of images(*batch_process.py*, it will teach you how to use multi-processing method of PyGPU)
 You can run them directly.
 
 ## 5. Limitation
