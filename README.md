@@ -158,6 +158,7 @@ __kernel void func(Type0 result, Type1 arg1, Type2 arg2, Type3 arg3, ...)
 To satisfy the limitation of PyGPU, the arguments type in kernel function can only be in scalar types, vector types or their one-dimensional pointer.  
 
 For scalar types or vector types, in kernel function you can choose from the following table:
+
 Scalar Type | Vector2 Type | Vector3 Type | Vector4 Type | Vector8 Type | Vector16 Type
 ------------|--------------|--------------|--------------|--------------|--------------
 char        |  char2       |  char3       |  char4       |  char8       |  char16
@@ -173,6 +174,7 @@ float       |  float2      |  float3      |  float4      |  float8      |  float
 double      |  double2     |  double3     |  double4     |  double8     |  double16
 
 For their pointers, in kernel function you can choose from the following table:
+
 Scalar Pointer | Vector2 pointer | Vector3 pointer | Vector4 pointer | Vector8 pointer | Vector16 pointer
 ---------------|-----------------|-----------------|-----------------|-----------------|-----------------
 char*          | char2*          | char3*          | char4*          | char8*          | char16*
