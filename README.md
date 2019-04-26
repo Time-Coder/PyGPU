@@ -89,7 +89,7 @@ pip install opencv-python
 ### 2.3 Installing PyGPU:
 * If you just want to import pygpu temporarily, put the file *pygpu.py* in your work directory and then you can import it in your program.
 
-* If you want to import pygpu from anywhere, put the file *pygpu.py* in the directory *Path\to\Python3\Lib\site-packages* or *Path\to\Anaconda3\Lib\site-packages* if you has Anaconda installed.
+* If you want to import pygpu from anywhere, put the file *pygpu.py* in the directory *Path/to/Python3/Lib/site-packages* or *Path/to/Anaconda3/Lib/site-packages* if you has Anaconda installed.
 
 ## 3. Usage
 First of all, you need to import pygpu in the head using:
@@ -146,7 +146,7 @@ In the kernel function, the first argument is the output argument. It serve as t
 For example, in kernel function the first argument is in type ``float*`` and you use ``gpu.set_return(np.zeros((100, 200, 3)))`` in the host side. ``gpu`` variable will reshape the raw one-dimensional ``float*`` into 100 rows 200 colums and 3 channels image liked matrix.  
 Be attention: ``gpu.set_return(a)`` not means ``gpu``'s return result will store in variable ``a``. ``a`` just give a template to ``gpu`` variable.
 
-5. **Call ``gpu`` just like a function**
+5. **Call ``gpu`` just like a function**  
 Now it's time to pass input arguments to ``gpu`` variable. Just in this way:
 ```
 result = gpu(arg1, arg2, arg3, ...)
@@ -202,7 +202,7 @@ double*        | double2*        | double3*        | double4*        | double8* 
 	* a numpy.ndarray, such as ``np.random.rand(3)``, ``np.random.rand(3, 3)``, ``np.random.rand(3, 3, 3)``
 All multi-dimension matrix liked data will be flatten into one dimension. And in the kernel side, you need to do some index tranform. You will see it in examples.
 
-6. **Next time you call ``gpu``**
+6. **Next time you call ``gpu``**  
 If you have call ``gpu`` once in this way: ``result = gpu(arg1, arg2, arg3, ...)``, next time you call ``gpu`` if some arguments are the same as first time, use ``None`` can avoid copying large data from host to device. For example, if ``arg1`` is a very large matrix and you called ``gpu`` once just like:
 ```
 result1 = gpu(large_matrix, 3)
@@ -218,17 +218,17 @@ result2 = gpu(None, 4)
 
 ### 3.2 process multi-missions with a single GPU
 If you want to do some same process for different arrays, such as for different images, but these images have the same size, you can copy these images to device together, process them together and copy them from device to host together. This will save a lot of time. You can do this in the following way:
-1. **Define a GPU class variable ``gpu``**  
-2. **Write kernel program**  
-3. **Tell ``gpu`` to use your kernel program**  
-4. **Set return template**  
+1. **Define a GPU class variable ``gpu``**
+2. **Write kernel program**
+3. **Tell ``gpu`` to use your kernel program**
+4. **Set return template**
 5. **Set arguments**:  
 This is the first difference from processing single mission. For each mission, all the matrix liked or array liked arguments must have the same size. So you need to sent each input argument a template before add missions. You can set arguments in this way:
 ```
 gpu.set_args(arg1, arg2, arg3, ...)
 ```
 For each mission, ``arg1`` or ``arg2`` will vary from time to time, but every one have the same size.
-6. **Add missions**
+6. **Add missions**  
 For example, if you set arguments template using ``gpu.set_args(arg1, arg2, arg3)`` and ``arg1`` is a image, it will change for each mission and ``arg2`` and ``arg3`` will be fixed. You can add missions in this way:
 ```
 gpu.add_mission(image1)
@@ -240,9 +240,9 @@ Be attention, their are some special rules for adding mission:
 	* image1 to 4 must have the same size
 	* varying arguments in kernel function must be in global pointer type. And global pointer arguments must be set in each ``add_mission`` time.
 	* fixed arguments in kernel function must be non-pointer type or local pointer
-7. **Process all the missions at the same time**
+7. **Process all the missions at the same time**  
 Just use ``gpu.run()`` is OK.
-8. **Get results**
+8. **Get results**  
 You can get ``i``th mission's result by using ``result = gpu.result(i)``
 
 ### 3.3 process multi-missions with multi-GPUs
