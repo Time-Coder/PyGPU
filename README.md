@@ -268,6 +268,7 @@ If you change the declaration in the first step ``gpu = GPU()`` into ``gpu = All
 
 ## 4. Examples
 In **Preview** section, there are already two examples. In ``examples`` folder, there are two more complex examples:
+
 	* Gaussain Blur a image(*blur.py*, it will teach you how to transform index between 2-dimensional matrix and one-dimensional array)
 	* Gaussain Blur a lot of images(*batch_process.py*, it will teach you how to use multi-processing method of PyGPU)
 You can run them directly.
