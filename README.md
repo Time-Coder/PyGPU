@@ -73,7 +73,6 @@ pip install opencv-python
 ```
 ### 2.2 Installing PyOpenCL
 1. Update OpenCL driver:   
-
 	* For Intel graphics card, go to website [OpenCL™ Runtimes for Intel® Processors](https://software.intel.com/en-us/articles/opencl-drivers#win64), download the correct driver for your operating system then install it.
 
 	* For Nvidia graphics card, go to website [NVIDIA Driver Downloads](https://www.nvidia.com/Download/index.aspx?lang=en-us), download the correct driver for your operating system then install it.
@@ -81,7 +80,6 @@ pip install opencv-python
 	* For AMD graphics card, go to website [Installing The AMD Catalyst Software Driver](https://www.amd.com/en/support/kb/faq/ccc-install), follow the guide in the website and finish your installation.
 
 2. Install PyOpenCL from prebuild binary:
-
 	1. Go to website [PyOpenCL prebuild binary](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopencl), download the correct version for your operating system.
 
 	2. Use command ``pip install <the file name you've just download>`` to install PyOpenCL
@@ -99,7 +97,6 @@ from pygpu import *
 ### 3.1 process a single mission
 1. **Define a GPU class' variable**(for example, name it as ``gpu``)  
 There are three ways to do this: 
-
 	1. ``gpu = GPU()``: This will use the default GPU device. In detail, it use the GPU on platform 0 and device 0.
 
 	2. ``gpu = GPU(1, 0)``: Tell GPU class to use the GPU device on platform 1 and device 0.
