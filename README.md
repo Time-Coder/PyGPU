@@ -99,11 +99,13 @@ from pygpu import *
 ### 3.1 process a single mission
 1. **Define a GPU class' variable**(for example, name it as ``gpu``)  
 There are three ways to do this: 
+
 	1. ``gpu = GPU()``: This will use the default GPU device. In detail, it use the GPU on platform 0 and device 0.
 
 	2. ``gpu = GPU(1, 0)``: Tell GPU class to use the GPU device on platform 1 and device 0.
 
 	3. ``gpu = GPU("nvidia")``: Use a name string can also indicate GPU class to use which device.
+	
 To see what devices do you have, execute command ``AllGPUs.list_devices()``. In my computer, it print this result:
 ```python
 >>> AllGPUs.list_device()
@@ -114,6 +116,7 @@ To see what devices do you have, execute command ``AllGPUs.list_devices()``. In 
 
 2. **Write kernel function**  
 The kernel function define the operation that you want to eval at each single data of your data set. You must write it in another file and in the rules of OpenCL kernel function. An also, PyGPU set several special rules rules for kernel function. In detail,
+
 	1. Begin your kernel function with a modifier ``__kernel``.
 
 	2. The return type of kernel must be ``void``.
@@ -132,6 +135,7 @@ The kernel function define the operation that you want to eval at each single da
 	7. In the body of the kernel function, use ``int i = get_global_id(0);`` to get the current work position. ``i`` means the kernel function now is generating the ``i``th data of the only output argument. ``i`` will vary from 0 to the length of first argument.(That comes the question: the first argument is a pure pointer, so how do program know the size of it's content? This will tell in step **Set return template**)
 
 	8. Write how to generate ``i``th output data in normal C language way.
+	
 Maybe you will get a little confused about these rules. It dosen't matter. The examples in section **Preview** and **Examples** and in *examples* folder will help you understand them.
 
 3. **Tell ``gpu`` to use your kernel function**  
@@ -156,7 +160,6 @@ Here are some rules to choose type of each arguments. For example, your kernel f
 __kernel void func(Type0 result, Type1 arg1, Type2 arg2, Type3 arg3, ...)
 ```
 To satisfy the limitation of PyGPU, the arguments type in kernel function can only be in scalar types, vector types or their one-dimensional pointer.  
-
 For scalar types or vector types, in kernel function you can choose from the following table:
 
 Scalar Type | Vector2 Type | Vector3 Type | Vector4 Type | Vector8 Type | Vector16 Type
@@ -172,7 +175,6 @@ ulong       |  ulong2      |  ulong3      |  ulong4      |  ulong8      |  ulong
 half        |  half2       |  half3       |  half4       |  half8       |  half16
 float       |  float2      |  float3      |  float4      |  float8      |  float16
 double      |  double2     |  double3     |  double4     |  double8     |  double16
-
 For their pointers, in kernel function you can choose from the following table:
 
 Scalar Pointer | Vector2 pointer | Vector3 pointer | Vector4 pointer | Vector8 pointer | Vector16 pointer
@@ -188,18 +190,15 @@ ulong*         | ulong2*         | ulong3*         | ulong4*         | ulong8*  
 half*          | half2*          | half3*          | half4*          | half8*          | half16*
 float*         | float2*         | float3*         | float4*         | float8*         | float16*
 double*        | double2*        | double3*        | double4*        | double8*        | double16*
-
-* if you use **scalar type** in kernel function, for example the first input argument is ``double arg1``, in host program, you can set ``arg1`` a single value(means not numpy array or list or tuple or other things, just a single value). You don't need to transform the type of ``arg1``. That means if you want to set ``arg1 = 1``, then just pass ``1`` to ``gpu``. You don't need to transform 1 to specific type such as ``np.float64(1)`` or ``cl.cltypes.double(1)``, no need.
-
-* if you use **vector type** in kernel function, for example the second input argument is ``float3 arg2``, in host program, then you can set ``arg2`` one of following type value:
-	* a one row numpy.ndarray with size 3, such as ``np.random.rand(3)``
-	* a list with 3 scalar value, such as ``[1, 2, 3]``
-	* a tuple with 3 scalar value, such as ``(1, 2, 3)``. But you can't let ``arg2`` maked by ``cl.cltypes.make_float3(...)``. Forget the old type transform way, forget them.
-
-* if you use **pointer** in kernel function, for example the third input argument is ``__global float*``, in the host program, you can set ``arg3`` one of the following type:
-	* a list of single value, such as ``[1, 2, 3, 4, 5, 6, ...]``
-	* a list of list or more nesting, such as ``[[1,2,3], [3,5,2], [9,3,6], ...]``
-	* a numpy.ndarray, such as ``np.random.rand(3)``, ``np.random.rand(3, 3)``, ``np.random.rand(3, 3, 3)``
+	* if you use **scalar type** in kernel function, for example the first input argument is ``double arg1``, in host program, you can set ``arg1`` a single value(means not numpy array or list or tuple or other things, just a single value). You don't need to transform the type of ``arg1``. That means if you want to set ``arg1 = 1``, then just pass ``1`` to ``gpu``. You don't need to transform 1 to specific type such as ``np.float64(1)`` or ``cl.cltypes.double(1)``, no need.
+	* if you use **vector type** in kernel function, for example the second input argument is ``float3 arg2``, in host program, then you can set ``arg2`` one of following type value:
+		* a one row numpy.ndarray with size 3, such as ``np.random.rand(3)``
+		* a list with 3 scalar value, such as ``[1, 2, 3]``
+		* a tuple with 3 scalar value, such as ``(1, 2, 3)``. But you can't let ``arg2`` maked by ``cl.cltypes.make_float3(...)``. Forget the old type transform way, forget them.
+	* if you use **pointer** in kernel function, for example the third input argument is ``__global float*``, in the host program, you can set ``arg3`` one of the following type:
+		* a list of single value, such as ``[1, 2, 3, 4, 5, 6, ...]``
+		* a list of list or more nesting, such as ``[[1,2,3], [3,5,2], [9,3,6], ...]``
+		* a numpy.ndarray, such as ``np.random.rand(3)``, ``np.random.rand(3, 3)``, ``np.random.rand(3, 3, 3)``
 All multi-dimension matrix liked data will be flatten into one dimension. And in the kernel side, you need to do some index tranform. You will see it in examples.
 
 6. **Next time you call ``gpu``**  
@@ -218,16 +217,22 @@ result2 = gpu(None, 4)
 
 ### 3.2 process multi-missions with a single GPU
 If you want to do some same process for different arrays, such as for different images, but these images have the same size, you can copy these images to device together, process them together and copy them from device to host together. This will save a lot of time. You can do this in the following way:
+
 1. **Define a GPU class variable ``gpu``**
+
 2. **Write kernel program**
+
 3. **Tell ``gpu`` to use your kernel program**
+
 4. **Set return template**
+
 5. **Set arguments**:  
 This is the first difference from processing single mission. For each mission, all the matrix liked or array liked arguments must have the same size. So you need to sent each input argument a template before add missions. You can set arguments in this way:
 ```
 gpu.set_args(arg1, arg2, arg3, ...)
 ```
 For each mission, ``arg1`` or ``arg2`` will vary from time to time, but every one have the same size.
+
 6. **Add missions**  
 For example, if you set arguments template using ``gpu.set_args(arg1, arg2, arg3)`` and ``arg1`` is a image, it will change for each mission and ``arg2`` and ``arg3`` will be fixed. You can add missions in this way:
 ```
@@ -240,8 +245,10 @@ Be attention, their are some special rules for adding mission:
 	* image1 to 4 must have the same size
 	* varying arguments in kernel function must be in global pointer type. And global pointer arguments must be set in each ``add_mission`` time.
 	* fixed arguments in kernel function must be non-pointer type or local pointer
+	
 7. **Process all the missions at the same time**  
 Just use ``gpu.run()`` is OK.
+
 8. **Get results**  
 You can get ``i``th mission's result by using ``result = gpu.result(i)``
 
