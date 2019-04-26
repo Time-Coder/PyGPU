@@ -175,6 +175,7 @@ ulong       |  ulong2      |  ulong3      |  ulong4      |  ulong8      |  ulong
 half        |  half2       |  half3       |  half4       |  half8       |  half16
 float       |  float2      |  float3      |  float4      |  float8      |  float16
 double      |  double2     |  double3     |  double4     |  double8     |  double16
+
 For their pointers, in kernel function you can choose from the following table:
 
 Scalar Pointer | Vector2 pointer | Vector3 pointer | Vector4 pointer | Vector8 pointer | Vector16 pointer
