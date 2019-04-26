@@ -191,15 +191,25 @@ ulong*         | ulong2*         | ulong3*         | ulong4*         | ulong8*  
 half*          | half2*          | half3*          | half4*          | half8*          | half16*
 float*         | float2*         | float3*         | float4*         | float8*         | float16*
 double*        | double2*        | double3*        | double4*        | double8*        | double16*
-	* if you use **scalar type** in kernel function, for example the first input argument is ``double arg1``, in host program, you can set ``arg1`` a single value(means not numpy array or list or tuple or other things, just a single value). You don't need to transform the type of ``arg1``. That means if you want to set ``arg1 = 1``, then just pass ``1`` to ``gpu``. You don't need to transform 1 to specific type such as ``np.float64(1)`` or ``cl.cltypes.double(1)``, no need.
-	* if you use **vector type** in kernel function, for example the second input argument is ``float3 arg2``, in host program, then you can set ``arg2`` one of following type value:
-		* a one row numpy.ndarray with size 3, such as ``np.random.rand(3)``
-		* a list with 3 scalar value, such as ``[1, 2, 3]``
-		* a tuple with 3 scalar value, such as ``(1, 2, 3)``. But you can't let ``arg2`` maked by ``cl.cltypes.make_float3(...)``. Forget the old type transform way, forget them.
-	* if you use **pointer** in kernel function, for example the third input argument is ``__global float*``, in the host program, you can set ``arg3`` one of the following type:
-		* a list of single value, such as ``[1, 2, 3, 4, 5, 6, ...]``
-		* a list of list or more nesting, such as ``[[1,2,3], [3,5,2], [9,3,6], ...]``
-		* a numpy.ndarray, such as ``np.random.rand(3)``, ``np.random.rand(3, 3)``, ``np.random.rand(3, 3, 3)``
+
+* if you use **scalar type** in kernel function, for example the first input argument is ``double arg1``, in host program, you can set ``arg1`` a single value(means not numpy array or list or tuple or other things, just a single value). You don't need to transform the type of ``arg1``. That means if you want to set ``arg1 = 1``, then just pass ``1`` to ``gpu``. You don't need to transform 1 to specific type such as ``np.float64(1)`` or ``cl.cltypes.double(1)``, no need.
+	
+* if you use **vector type** in kernel function, for example the second input argument is ``float3 arg2``, in host program, then you can set ``arg2`` one of following type value:
+	
+	* a one row numpy.ndarray with size 3, such as ``np.random.rand(3)``
+		
+	* a list with 3 scalar value, such as ``[1, 2, 3]``
+		
+	* a tuple with 3 scalar value, such as ``(1, 2, 3)``. But you can't let ``arg2`` maked by ``cl.cltypes.make_float3(...)``. Forget the old type transform way, forget them.
+		
+* if you use **pointer** in kernel function, for example the third input argument is ``__global float*``, in the host program, you can set ``arg3`` one of the following type:
+	
+	* a list of single value, such as ``[1, 2, 3, 4, 5, 6, ...]``
+		
+	* a list of list or more nesting, such as ``[[1,2,3], [3,5,2], [9,3,6], ...]``
+		
+	* a numpy.ndarray, such as ``np.random.rand(3)``, ``np.random.rand(3, 3)``, ``np.random.rand(3, 3, 3)``
+		
 All multi-dimension matrix liked data will be flatten into one dimension. And in the kernel side, you need to do some index tranform. You will see it in examples.
 
 6. **Next time you call ``gpu``**  
@@ -257,10 +267,15 @@ You can get ``i``th mission's result by using ``result = gpu.result(i)``
 If you change the declaration in the first step ``gpu = GPU()`` into ``gpu = AllGPUs()``, it will automatically distribute missions to all GPUs on your computer and let them start computation at the same time.
 
 ### 3.4 other functions
+
 1. ``GPU.device_name()`` return the current GPU name.
+
 2. ``GPU.print_info()`` or ``AllGPUs.print_info()`` print current GPU's detail information or all GPUs' detail information.
+
 3. ``GPU.clear()`` or ``AllGPUs.clear()`` make GPU or AllGPUs class' instance return to the state before set_program.
+
 4. ``GPU.clear_missions()`` or ``AllGPUs.clear_missions()`` make GPU or AllGPUs class' instance return to the state before add first mission.
+
 5. ``GPU.print_performance()`` or ``AllGPUs.print_performance()`` print the performace of last computation. It includes:
 	* total time
 	* time of copying data from host to device
@@ -268,24 +283,39 @@ If you change the declaration in the first step ``gpu = GPU()`` into ``gpu = All
 	* time of copying data from device to host
 	* computing/total time ratio
 	* computing/copying time ratio
+	
 6. ``GPU.device2host_time()`` return the time of copying data from device to host of last computation(in second).
+
 7. ``GPU.compute_time()`` return computing time of last computation(in second).
+
 8. ``GPU.host2device_time()`` return the time of copying data from host to device of last computation(in second).
+
 9. ``GPU.total_time()`` return the total time of last computation(in second).
 
 ## 4. Examples
 In **Preview** section, there are already two examples. In ``examples`` folder, there are two more complex examples:
+
 * Gaussain Blur a image(*blur.py*, it will teach you how to transform index between 2-dimensional matrix and one-dimensional array)
+
 * Gaussain Blur a lot of images(*batch_process.py*, it will teach you how to use multi-processing method of PyGPU)
+
 You can run them directly.
 
 ## 5. Limitation
 This library's usage is simple enough. Simple means the degree of freedom is low. So their are much limitation. Here list some limitation I known:
+
 1. There can only be one output argument in kernel function.
+
 2. The output argument in kernel function must be the first argument in kernel function.
+
 3. You cannot use ``__local`` memory
+
 4. You can only use one-dimensional pointer in kernel function.
+
 5. You can't distribute work groups or work items by your self, you can only let OpenCL do this automatically for you.
+
 6. In multi-missions processing, you can only change global pointer type arguments and global pointer type arguments must be set for each mission even if they are same.
+
 7. You can only use the types in the table in kernel function. You cannot use user defined class or structure or other types.
+
 There are also many other limitiations. But for some simple parallel processing, I think these functions are enough.
