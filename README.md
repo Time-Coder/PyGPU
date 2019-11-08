@@ -250,9 +250,12 @@ gpu.add_mission(image3)
 gpu.add_mission(image4)
 ```
 Be attention, their are some special rules for adding mission:
+
 	* image1 to 4 must have the same size
+
 	* varying arguments in kernel function must be in global pointer type. And global pointer arguments must be set in each ``add_mission`` time.
-	* fixed arguments in kernel function must be non-pointer type or local pointer
+	
+	* fixed arguments in kernel function must be non-pointer type or constant pointer
 	
 7. **Process all the missions at the same time**  
 Just use ``gpu.run()`` is OK.

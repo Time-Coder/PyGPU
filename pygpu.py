@@ -113,6 +113,11 @@ class GPU():
 
 		self._clear_args()
 		for i, host_arg in enumerate(args):
+			if isinstance(host_arg, np.ndarray):
+				origine_shape = host_arg.shape
+				host_arg = host_arg.flatten()
+				host_arg = np.reshape(host_arg, origine_shape)
+				
 			device_arg = self._type_transform(host_arg, self._cl_typenames[i+1])
 			self._default_args.append(device_arg)
 			self._kernel.set_arg(i+1, device_arg)
