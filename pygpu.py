@@ -354,8 +354,8 @@ class GPU():
 						exit(-1)
 					func_name = 'cl.cltypes.make_' + typename
 					str_args = str(arg[0])
-					for i in range(1, count):
-						str_args += (', ' + str(arg[i]))
+					for j in range(1, count):
+						str_args += (', ' + str(arg[j]))
 					return eval(func_name + '(' + str_args + ')')
 
 			typename = base
@@ -393,8 +393,8 @@ class GPU():
 						exit(-1)
 					func_name = 'cl.cltypes.make_' + typename
 					str_args = str(arg[0])
-					for i in range(1, count):
-						str_args += (', ' + str(arg[i]))
+					for j in range(1, count):
+						str_args += (', ' + str(arg[j]))
 					self._real_args[i] = eval(func_name + '(' + str_args + ')')
 					self._kernel.set_arg(i, self._real_args[i])
 					return
